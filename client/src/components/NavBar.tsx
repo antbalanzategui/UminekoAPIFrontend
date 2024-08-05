@@ -1,17 +1,16 @@
-// client/components/NavBar.js
 'use client'
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { GitHub, Menu, X } from 'react-feather'; // Import Menu and X for the hamburger icon
-import { ModeToggle } from './ModeToggle'; // Import the ModeToggle component
+import { GitHub, Menu, X } from 'react-feather';
+import { ModeToggle } from './ModeToggle';
 import { useTheme } from 'next-themes';
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from '@/components/ui/navigation-menu';
 import { cn } from '@/lib/utils';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList } from "@/components/ui/breadcrumb";
-import Image from 'next/image'; // Import next/image for optimized image loading
+import Image from 'next/image';
 
 export default function NavBar() {
   const { resolvedTheme } = useTheme();
@@ -20,10 +19,25 @@ export default function NavBar() {
 
   useEffect(() => {
     setIsMounted(true);
+
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsSidebarOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const closeSidebar = () => {
+    setIsSidebarOpen(false);
   };
 
   if (!isMounted) {
@@ -36,14 +50,14 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className="flex items-center justify-between p-4 text-black dark:text-white bg-stone-50 dark:bg-stone-950">
+      <nav className={`flex items-center justify-between p-4 text-black dark:text-white bg-stone-50 bg-opacity-90 dark:bg-stone-950 dark:bg-opacity-90 backdrop-blur-md z-50 sticky top-0 ${isSidebarOpen ? 'bg-opacity-0 z-0' : ''}`}>
         <div className="flex items-center space-x-5">
           <div className="md:hidden flex items-center">
             <Button variant="outline" size="icon" onClick={toggleSidebar} className="hover:bg-stone-100 border-stone-200 dark:border-stone-800 dark:hover:bg-stone-700">
               <Menu />
             </Button>
           </div>
-          <Link href="/" legacyBehavior passHref>
+          <Link href="/" legacyBehavior passHref onClick={closeSidebar}>
             <a className="hidden md:flex items-center space-x-2">
               <div className="relative h-8 w-8">
                 <Image
@@ -69,16 +83,16 @@ export default function NavBar() {
               <Breadcrumb className="flex items-center space-x-5">
                 <BreadcrumbList className="space-x-4 text-stone-600 dark:text-stone-300">
                   <BreadcrumbItem>
-                    <BreadcrumbLink href="/docs">Documentation</BreadcrumbLink>
+                    <Link href="/docs" onClick={closeSidebar} className="transition-colors duration-300 hover:text-black dark:hover:text-white">Documentation</Link>
                   </BreadcrumbItem>
                   <BreadcrumbItem>
-                    <BreadcrumbLink href="/examples">Examples</BreadcrumbLink>
+                    <Link href="/examples" onClick={closeSidebar} className="transition-colors duration-300 hover:text-black dark:hover:text-white">Examples</Link>
                   </BreadcrumbItem>
                   <BreadcrumbItem>
-                    <BreadcrumbLink href="/login">Login</BreadcrumbLink>
+                    <Link href="/login" onClick={closeSidebar} className="transition-colors duration-300 hover:text-black dark:hover:text-white">Login</Link>
                   </BreadcrumbItem>
                   <BreadcrumbItem>
-                    <BreadcrumbLink href="/signup">Sign Up</BreadcrumbLink>
+                    <Link href="/signup" onClick={closeSidebar} className="transition-colors duration-300 hover:text-black dark:hover:text-white">Sign Up</Link>
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
@@ -139,19 +153,19 @@ export default function NavBar() {
               <Breadcrumb className="py-0 px-8 text-black dark:text-white">
                 <BreadcrumbList className="flex flex-col space-y-4 text-stone-600 dark:text-stone-300">
                   <BreadcrumbItem>
-                    <BreadcrumbLink href="/" className='block'>Home</BreadcrumbLink>
+                    <Link href="/" className='block' onClick={closeSidebar}>Home</Link>
                   </BreadcrumbItem>
                   <BreadcrumbItem>
-                    <BreadcrumbLink href="/docs" className='block'>Documentation</BreadcrumbLink>
+                    <Link href="/docs" className='block' onClick={closeSidebar}>Documentation</Link>
                   </BreadcrumbItem>
                   <BreadcrumbItem>
-                    <BreadcrumbLink href="/examples" className='block'>Examples</BreadcrumbLink>
+                    <Link href="/examples" className='block' onClick={closeSidebar}>Examples</Link>
                   </BreadcrumbItem>
                   <BreadcrumbItem>
-                    <BreadcrumbLink href="/login" className='block'>Login</BreadcrumbLink>
+                    <Link href="/login" className='block' onClick={closeSidebar}>Login</Link>
                   </BreadcrumbItem>
                   <BreadcrumbItem>
-                    <BreadcrumbLink href="/signup" className='block'>Sign Up</BreadcrumbLink>
+                    <Link href="/signup" className='block' onClick={closeSidebar}>Sign Up</Link>
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
