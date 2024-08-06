@@ -26,12 +26,43 @@ export default function NavBar() {
       }
     };
 
+
     window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', setScrollbarWidth);
+    setScrollbarWidth();
+
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', setScrollbarWidth);
     };
   }, []);
 
+  const setScrollbarWidth = () => {
+    const scrollDiv = document.createElement('div');
+    scrollDiv.style.width = '100px';
+    scrollDiv.style.height = '100px';
+    scrollDiv.style.overflow = 'scroll';
+    scrollDiv.style.position = 'absolute';
+    scrollDiv.style.top = '-9999px';
+    document.body.appendChild(scrollDiv);
+  
+    const scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth;
+    document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
+    
+    document.body.removeChild(scrollDiv);
+  };
+  
+  useEffect(() => {
+    if (isSidebarOpen) {
+      setScrollbarWidth();
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${getComputedStyle(document.documentElement).getPropertyValue('--scrollbar-width')}`;
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    }
+  }, [isSidebarOpen]);
+  
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -50,7 +81,7 @@ export default function NavBar() {
 
   return (
     <>
-      <nav className={`flex items-center justify-between p-4 text-black dark:text-white bg-stone-50 bg-opacity-90 dark:bg-stone-950 dark:bg-opacity-90 backdrop-blur-md z-50 sticky top-0 ${isSidebarOpen ? 'bg-opacity-0 z-0' : ''}`}>
+      <nav className={`flex items-center justify-between p-4 text-black dark:text-white bg-stone-50 bg-opacity-90 dark:bg-stone-950 dark:bg-opacity-90 backdrop-blur-md z-40 sticky top-0 ${isSidebarOpen ? '' : ''}`}>
         <div className="flex items-center space-x-5">
           <div className="md:hidden flex items-center">
             <Button variant="outline" size="icon" onClick={toggleSidebar} className="hover:bg-stone-100 border-stone-200 dark:border-stone-800 dark:hover:bg-stone-700">

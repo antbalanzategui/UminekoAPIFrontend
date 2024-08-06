@@ -1,8 +1,11 @@
-// client/pages/Home.tsx
 import DualImage from '../components/DualImage';
 import { Button } from "@/components/ui/button";
 import Link from 'next/link';
 import Features from '../components/Features';
+import { VisitorsGraph } from '@/components/VisitorsGraph';
+import { TripleGraphs } from '@/components/TripleGraphs';
+import Testimonials from '../components/Testimonials';
+import Footer from '../components/Footer';
 
 const Home: React.FC = () => {
   return (
@@ -32,6 +35,10 @@ const Home: React.FC = () => {
         </div>
       </div>
       <Features />
+      <VisitorsGraph />
+      <TripleGraphs />
+      <Testimonials/>
+      
     </>
   );
 };

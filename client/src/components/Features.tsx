@@ -41,7 +41,7 @@ const Features: React.FC = () => {
           <TooltipProvider key={index}>
             <Tooltip>
               <TooltipTrigger>
-                <Card className="hover:shadow-lg transition-shadow duration-300 h-72 md:h-72 lg:h-72 flex flex-col justify-between items-center text-center bg-stone-50 dark:bg-stone-950 border-stone-200 dark:border-stone-700">
+                <Card className="hover:shadow-lg transition-shadow duration-300 h-80 md:h-72 lg:h-72 flex flex-col justify-between items-center text-center bg-stone-50 dark:bg-stone-950 border-stone-200 dark:border-stone-700">
                   <CardHeader className="flex flex-col items-center">
                     <div className="mb-3 text-amber-400 dark:text-amber-500">{feature.icon}</div>
                     <div>
