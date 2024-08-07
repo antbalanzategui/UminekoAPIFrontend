@@ -1,7 +1,8 @@
+import Examples from '@/components/Examples';
 export default function Page() {
     return (
         <>
-            <h1>Examples</h1>
+            <Examples/>
         </>
     )
 }
