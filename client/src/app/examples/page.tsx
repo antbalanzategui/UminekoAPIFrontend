@@ -1,4 +1,4 @@
-import Examples from '@/components/Examples';
+import Examples from './Examples';
 export default function Page() {
     return (
         <>

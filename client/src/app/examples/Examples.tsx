@@ -8,32 +8,37 @@ import {
   CardFooter
 } from "@/components/ui/card";
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Examples() {
   const cardData = [
     {
       title: "Portraits",
       description: "Explore character portraits.",
-      image: "/path/to/portrait-image.jpg",
-      footer: "Click Here"
+      image: "/",
+      footer: "Click Here",
+      link: '/examples/portraits',
     },
     {
       title: "Soundtrack",
       description: "Listen to the series' soundtrack.",
       image: "/path/to/soundtrack-image.jpg",
-      footer: "Click Here"
+      footer: "Click Here",
+      link: '/examples/soundtrack',
     },
     {
       title: "Image Gallery",
       description: "View a gallery of images.",
       image: "/path/to/gallery-image.jpg",
-      footer: "Click Here"
+      footer: "Click Here",
+      link: '/examples/portraits',
     },
     {
       title: "More Examples",
       description: "Discover more about the API.",
       image: "/path/to/more-image.jpg",
-      footer: "Click Here"
+      footer: "Click Here",
+      link: '/examples/portraits',
     },
   ];
 
@@ -62,7 +67,9 @@ export default function Examples() {
                 <CardDescription>{card.description}</CardDescription>
               </CardContent>
               <CardFooter className="text-center">
+                <Link href={card.link}>
                 <p className="text-blue-500 cursor-pointer">{card.footer}</p>
+                </Link>
               </CardFooter>
             </Card>
           ))}
