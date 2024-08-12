@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { FC, useEffect, useState } from "react";
 import { Progress } from "@/components/ui/progress";
@@ -25,7 +25,7 @@ const Soundtrack: FC<SoundtrackProps> = ({ soundtracks }) => {
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loadingStates, setLoadingStates] = useState<boolean[]>(new Array(soundtracks.length).fill(true));
 
   useEffect(() => {
     if (!api) {
@@ -42,11 +42,15 @@ const Soundtrack: FC<SoundtrackProps> = ({ soundtracks }) => {
       setCurrent(currentSlide);
       setProgress((currentSlide / totalSlides) * 100);
     });
-
-    setTimeout(() => {
-      setLoading(false);  // Set loading to false after data is "loaded"
-    }, 2000); // Adjust the timeout as needed
   }, [api]);
+
+  const handleIframeLoad = (index: number) => {
+    setLoadingStates(prevStates => {
+      const newStates = [...prevStates];
+      newStates[index] = false;
+      return newStates;
+    });
+  };
 
   return (
     <section className="max-w-screen-xl mx-auto py-12">
@@ -58,34 +62,26 @@ const Soundtrack: FC<SoundtrackProps> = ({ soundtracks }) => {
               <div className="p-1 flex flex-col w-full">
                 <Card className="flex flex-col flex-grow">
                   <CardHeader>
-                    {loading ? (
-                      <Skeleton className="w-[200px] h-[20px]" />
-                    ) : (
-                      <h3>{soundtrack.title}</h3>
-                    )}
+                    <h3>{soundtrack.title}</h3>
                   </CardHeader>
                   <CardContent className="flex items-center justify-center p-6 flex-grow">
-                    {loading ? (
-                      <Skeleton className="w-full h-0 pb-[56.25%]" />
-                    ) : (
-                      <div className="w-full h-0 pb-[56.25%] relative">
-                        <iframe
-                          className="absolute top-0 left-0 w-full h-full"
-                          src={`https://www.youtube.com/embed/${soundtrack.videoId}?autoplay=0&modestbranding=1&rel=0`}
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          allowFullScreen
-                          title={soundtrack.title}
-                        ></iframe>
-                      </div>
-                    )}
+                    <div className="relative w-full h-0 pb-[56.25%]">
+                      <iframe
+                        className={`absolute top-0 left-0 w-full h-full ${loadingStates[index] ? 'hidden' : ''}`}
+                        src={`https://www.youtube.com/embed/${soundtrack.videoId}?autoplay=0&modestbranding=1&rel=0`}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        title={soundtrack.title}
+                        onLoad={() => handleIframeLoad(index)}
+                      ></iframe>
+                      {loadingStates[index] && (
+                        <Skeleton className="absolute top-0 left-0 w-full h-full" />
+                      )}
+                    </div>
                   </CardContent>
                   <CardFooter>
-                    {loading ? (
-                      <Skeleton className="w-[100px] h-[20px] rounded-full" />
-                    ) : (
-                      <h1>Composer: {soundtrack.composer}</h1>
-                    )}
+                    <h1>Composer: {soundtrack.composer}</h1>
                   </CardFooter>
                 </Card>
               </div>
